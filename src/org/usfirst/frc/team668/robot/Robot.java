@@ -29,6 +29,11 @@ public class Robot extends IterativeRobot {
 	double iVal = 0.0;
 	double dVal = 0.0;
 	boolean go = true;
+	double scale = 0.001;
+	int setpoint = 65;
+	boolean button3 = false, button4 = false, button5 = false, button6 = false,
+			button7 = false, button8 = false, button9 = false,
+			button10 = false, button11 = false, button12 = false;
 	
 	public void robotInit() {
 		hammerTalon = new CANTalon(2); // STOP! HAMMER TALON!
@@ -44,8 +49,8 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		hammerEncoder.reset();
 		pid.setPID(pVal, iVal, dVal);
-		pid.setSetpoint(65); // Predetermined setpoint
-//		pid.enable();
+		pid.setSetpoint(setpoint); // Predetermined setpoint
+		// pid.enable();
 		go = true;
 	}
 	
@@ -68,8 +73,7 @@ public class Robot extends IterativeRobot {
 			pid.disable();
 			SmartDashboard.putString("Distance Disabled?", "Yes");
 			go = false;
-		}
-		else {
+		} else {
 			// SmartDashboard.putString("Current Disabled?", "Not yet");
 			SmartDashboard.putString("Distance Disabled?", "Not yet");
 			SmartDashboard.putNumber("Hammer Encoder Value", hammerEncoder.get());
@@ -103,8 +107,8 @@ public class Robot extends IterativeRobot {
 				SmartDashboard.putString("Disabled", "True");
 			} else {
 				pid.setPID(pVal, iVal, dVal);
-				pid.setSetpoint(65);
-//				pid.enable();
+				pid.setSetpoint(setpoint);
+				// pid.enable();
 				SmartDashboard.putString("Disabled", "False");
 			}
 			
@@ -142,10 +146,7 @@ public class Robot extends IterativeRobot {
 		
 		if (Math.abs(hammerEncoder.getDistance()) > 150.0) {
 			hammerTalon.set(0);
-		} else {
-			hammerTalon.set(joystickOp.getY() / 2.0); // Negative value goes into robot
 		}
-		SmartDashboard.putNumber("joystick y", joystickOp.getY() / 2.0);
 		
 	}
 	
@@ -165,12 +166,14 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putString("Current Disabled?", "Yes");
 		// hammerTalon.set(0.0);
 		// go = false;
+		
+		pid.setSetpoint(setpoint);
+		
 		if (Math.abs(hammerEncoder.getDistance()) > 150 || go == false) { // This is for distance-stop (Almost top)
 			pid.disable();
 			SmartDashboard.putString("Distance Disabled?", "Yes");
 			go = false;
-		}
-		else {
+		} else {
 			// SmartDashboard.putString("Current Disabled?", "Not yet");
 			SmartDashboard.putString("Distance Disabled?", "Not yet");
 			SmartDashboard.putNumber("Hammer Encoder Value", hammerEncoder.get());
@@ -184,17 +187,74 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putNumber("I", pid.getI());
 			SmartDashboard.putNumber("D", pid.getD());
 			SmartDashboard.putNumber("PID Error", pid.getError());
+			SmartDashboard.putNumber("Scale", scale);
+			SmartDashboard.putNumber("Setpoint", setpoint);
 			
 			System.out.println("P: " + pid.getP());
 			System.out.println("I: " + pid.getI());
 			System.out.println("D: " + pid.getD());
 			
-			if (joystickOp.getRawButton(7)) {
-				pVal = ((-joystickOp.getThrottle() - 1) / 2); // Throttles on joystick is -1 (away from you) and 1 (towards you)
-			} else if (joystickOp.getRawButton(9)) { // we want 1 (away from you) and 0 (towards you)
-				iVal = ((-joystickOp.getThrottle() - 1) / 2);
-			} else if (joystickOp.getRawButton(11)) {
-				dVal = ((-joystickOp.getThrottle() - 1) / 2);
+			if (joystickOp.getRawButton(5) && button5 == false) {
+				scale *= 10;
+				button5 = true;
+			} else if (!joystickOp.getRawButton(5)) {
+				button5 = false;
+			}
+			if (joystickOp.getRawButton(3) && button3 == false) {
+				scale /= 10;
+				button3 = true;
+			} else if (!joystickOp.getRawButton(3)) {
+				button3 = false;
+			}
+			
+			if (joystickOp.getRawButton(6) && button6 == false) {
+				setpoint += scale * 1000;
+				button6 = true;
+			} else if (!joystickOp.getRawButton(6)) {
+				button6 = false;
+			}
+			if (joystickOp.getRawButton(4) && button4 == false) {
+				setpoint -= scale * 1000;
+				button4 = true;
+			} else if (!joystickOp.getRawButton(4)) {
+				button4 = false;
+			}
+			
+			if (joystickOp.getRawButton(7) && button7 == false) {
+				pVal += scale;
+				button7 = true;
+			} else if (!joystickOp.getRawButton(7)) {
+				button7 = false;
+			}
+			if (joystickOp.getRawButton(8) && button8 == false) {
+				pVal -= scale;
+				button8 = true;
+			} else if (!joystickOp.getRawButton(8)) {
+				button8 = false;
+			}
+			if (joystickOp.getRawButton(9) && button9 == false) {
+				iVal += scale;
+				button9 = true;
+			} else if (!joystickOp.getRawButton(9)) {
+				button9 = false;
+			}
+			if (joystickOp.getRawButton(10) && button10 == false) {
+				iVal -= scale;
+				button10 = true;
+			} else if (!joystickOp.getRawButton(10)) {
+				button10 = false;
+			}
+			if (joystickOp.getRawButton(11) && button11 == false) {
+				dVal += scale;
+				button11 = true;
+			} else if (!joystickOp.getRawButton(11)) {
+				button11 = false;
+			}
+			if (joystickOp.getRawButton(12) && button12 == false) {
+				dVal -= scale;
+				button12 = true;
+			} else if (!joystickOp.getRawButton(12)) {
+				button12 = false;
 			}
 			
 			if (Math.abs(hammerEncoder.getDistance()) > 150.0) {
@@ -206,12 +266,11 @@ public class Robot extends IterativeRobot {
 				if (joystickOp.getRawButton(2)) {
 					pid.disable();
 					SmartDashboard.putString("Disabled", "True");
-				}
-				else if (joystickOp.getRawButton(1)) { // We want disable to be priority over enable and only have one work
+				} else if (joystickOp.getRawButton(1)) { // We want disable to be priority over enable and only have one work
 					pid.enable();
 					SmartDashboard.putString("Disabled", "False");
 				}
-//				pid.enable();
+				// pid.enable();
 			}
 			
 			SmartDashboard.putNumber("PID Error", pid.getError());
@@ -221,6 +280,8 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putNumber("Current", pdp.getCurrent(14));
 			
 			System.out.println("Current: " + pdp.getCurrent(14));
+			
+			SmartDashboard.putNumber("Encoder Speed", hammerEncoder.getRate());
 		}
 	}
 	
