@@ -1,5 +1,5 @@
 # PIDTesting2015 <br />
-<h2>PIDTesting 2015 - Impulse</h2>
+<h2 align='center'>PIDTesting 2015 - Impulse</h2>
 This project's only use is to test PID.<br />
 Currently, we are working on 2014 Impulse's Hammer.<br />
 Here are our current values:<br />
