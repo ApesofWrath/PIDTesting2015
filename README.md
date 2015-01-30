@@ -10,6 +10,6 @@ These values should also be hard coded into the program as defaults.<br />
 <br />
 <h2 align='center'>---DOCUMENTATION---</h2>
 We have found that having a low P value is beneficial. We started by keeping the I and D values at 0 and trying to find a value for P that worked by itself. For us, the P value -0.018 was self-sufficient and could stabilize itself, albeit at a lower location than the desired setpoint. Also, we have noticed that we want to keep I at an extremely low value and that higher values of D cause really bad oscillation at higher setpoints.<br />
-<h2 format='bold'>NOTE: A value of -0.1 would be "higher" than -0.05 in this example.</h2>
+<h4 format='bold'>NOTE: A value of -0.1 would be "higher" than -0.05 in this example.</h4>
 -Andy<br />
 2015<br />
