@@ -25,9 +25,9 @@ public class Robot extends IterativeRobot {
 	Encoder hammerEncoder;
 	PIDController pid;
 	Joystick joystickOp;
-	double pVal = 0.0;
-	double iVal = 0.0;
-	double dVal = 0.0;
+	double pVal = -0.018; // These are the current tuning values
+	double iVal = -0.001; // They can still be changed in the code
+	double dVal = -0.030;
 	boolean go = true;
 	double scale = 0.001;
 	int setpoint = 65;
