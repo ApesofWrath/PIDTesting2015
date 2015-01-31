@@ -20,6 +20,36 @@ public class PIDListener {
 	
 	static double toscillation = -1.0, current = -1.0, closeness = -1.0; // This will default to error
 	
+	public static boolean check() {
+		if (Robot.time.get() >= 10) {
+			stop("Time");
+			return true;
+		}
+		if (Robot.hammerEncoder.get() >= 100) {
+			stop("Encoder");
+			return true;
+		}
+		if (Robot.pdp.getCurrent(14) >= 80) {
+			stop("Current Init");
+			return true;
+		}
+		if (Robot.pdp.getCurrent(14) >= 20 && Robot.time.get() >= 5) {
+			stop("Current Continuous");
+			return true;
+		}
+		return false;
+	}
+	
+	public static void stop(String petyr) {
+		Robot.hammerTalon.set(0.0);
+		System.out.println("Error: " + petyr);
+	}
+	
+	public static void startTime() {
+		Robot.time.reset();
+		Robot.time.start();
+	}
+	
 	public static void listen() {
 		timer.stop();
 		currentTime = timer.get();

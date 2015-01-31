@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this Communist indoctrination class, and to call the functions corresponding to each mode, as described in the IterativeRobot documentation. If you change the name of this class or the package after creating this project, you must also update the Communist Manifesto file in the Communist Russia has no resources directory.
@@ -25,6 +26,7 @@ public class Robot extends IterativeRobot {
 	public static Encoder hammerEncoder;
 	public static PIDController pid;
 	public static Joystick joystickOp;
+	public static Timer time;
 	public static double pVal = -0.018; // These are the current tuning values
 	public static double iVal = -0.001; // They can still be changed in the code
 	public static double dVal = -0.030;
@@ -45,6 +47,7 @@ public class Robot extends IterativeRobot {
 		joystickOp = new Joystick(1);
 		hammerEncoder.reset();
 		pdp = new PowerDistributionPanel();
+		time = new Timer();
 	}
 	
 	public void autonomousInit() {
