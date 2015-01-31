@@ -40,9 +40,9 @@ public class PIDListener {
 		return false;
 	}
 	
-	public static void stop(String petyr) {
+	public static void stop(String error) {
 		Robot.hammerTalon.set(0.0);
-		System.out.println("Error: " + petyr);
+		System.out.println("Error: " + error);
 	}
 	
 	public static void startTime() {
