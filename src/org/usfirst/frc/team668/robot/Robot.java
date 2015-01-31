@@ -20,18 +20,19 @@ public class Robot extends IterativeRobot {
 	 * This function is run when the robot is first started up and should be used for any initialization code.
 	 */
 	
-	CANTalon hammerTalon;
-	PowerDistributionPanel pdp;
-	Encoder hammerEncoder;
-	PIDController pid;
-	Joystick joystickOp;
-	double pVal = -0.018; // These are the current tuning values
-	double iVal = -0.001; // They can still be changed in the code
-	double dVal = -0.030;
-	boolean go = true;
-	double scale = 0.001;
-	int setpoint = 65;
-	boolean button3 = false, button4 = false, button5 = false, button6 = false,
+	public static CANTalon hammerTalon;
+	public static PowerDistributionPanel pdp;
+	public static Encoder hammerEncoder;
+	public static PIDController pid;
+	public static Joystick joystickOp;
+	public static double pVal = -0.018; // These are the current tuning values
+	public static double iVal = -0.001; // They can still be changed in the code
+	public static double dVal = -0.030;
+	public static boolean go = true;
+	public static double scale = 0.001;
+	public static int setpoint = 65;
+	public static double current = 0.0;
+	public static boolean button3 = false, button4 = false, button5 = false, button6 = false,
 			button7 = false, button8 = false, button9 = false,
 			button10 = false, button11 = false, button12 = false;
 	
