@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
 	public static Encoder hammerEncoder;
 	public static PIDController pid;
 	public static Joystick joystickOp;
-	public static Timer time;
+	public static Timer time, ti;
 	public static double pVal = -0.018; // These are the current tuning values
 	public static double iVal = -0.001; // They can still be changed in the code
 	public static double dVal = -0.030;
@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 		hammerTalon = new CANTalon(2); // STOP! HAMMER TALON!
 		hammerEncoder = new Encoder(9, 8);
 		hammerEncoder.setPIDSourceParameter(PIDSourceParameter.kDistance);
-		hammerTalon.reverseOutput(false); // LOCATION ESTAR AQUI
+		hammerTalon.reverseOutput(false); // LOCATION ESTA AQUI
 		pid = new PIDController(0.0, 0.0, 0.0, hammerEncoder, hammerTalon);
 		joystickOp = new Joystick(1);
 		hammerEncoder.reset();
@@ -73,6 +73,11 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putString("Current Disabled?", "Yes");
 		// hammerTalon.set(0.0);
 		// go = false;
+		PIDListener.listen();
+		if(!pid.isEnable()) { // Checks if true
+			disable();
+		}
+		
 		if (Math.abs(hammerEncoder.getDistance()) > 150 || go == false) { // This is for distance-stop (Almost top)
 			pid.disable();
 			SmartDashboard.putString("Distance Disabled?", "Yes");
@@ -172,20 +177,21 @@ public class Robot extends IterativeRobot {
 		// go = false;
 		
 		pid.setSetpoint(setpoint);
+		PIDListener.listen();
 		
 		if (Math.abs(hammerEncoder.getDistance()) > 150 || go == false) { // This is for distance-stop (Almost top)
 			pid.disable();
 			SmartDashboard.putString("Distance Disabled?", "Yes");
 			go = false;
 		} else {
+			
 			// SmartDashboard.putString("Current Disabled?", "Not yet");
 			SmartDashboard.putString("Distance Disabled?", "Not yet");
 			SmartDashboard.putNumber("Hammer Encoder Value", hammerEncoder.get());
 			SmartDashboard.putNumber("Hammer Encoder Rate", hammerEncoder.getRate());
 			
 			System.out.println("Hammer Encoder Value: " + hammerEncoder.get());
-			System.out.println("Hammer Encoder Rate: "
-					+ hammerEncoder.getRate());
+			System.out.println("Hammer Encoder Rate: " + hammerEncoder.getRate());
 			
 			SmartDashboard.putNumber("P", pid.getP());
 			SmartDashboard.putNumber("I", pid.getI());
@@ -289,4 +295,21 @@ public class Robot extends IterativeRobot {
 		}
 	}
 	
+	public static void enable() { 
+		pid.enable();
+	}
+	
+	public static void disable() {
+		pid.disable();
+		ti = new Timer();
+		ti.reset();
+		ti.start();
+		if(ti.get() >= 8) {
+			enable();
+		}
+	}
+	
+	public static void noGo() { // Locks 4eva (Like Sarah + Snyder) [until disable + enable takes over]
+		go = false; // Give me my orchids.
+	}
 }
